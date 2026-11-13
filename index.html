@@ -25,11 +25,13 @@ body {
   line-height: 1.7;
 }
 
+/* HEADER */
 header {
   background: linear-gradient(135deg, #172b8c, #743bd6, #a64be8);
   color: white;
   text-align: center;
   padding: 75px 20px;
+  animation: slideDown 1s ease;
 }
 
 header h1 {
@@ -48,8 +50,32 @@ header p {
   border-radius: 50%;
   border: 4px solid white;
   margin-bottom: 20px;
+  transition: transform 0.5s ease;
 }
 
+.profile-photo:hover {
+  transform: scale(1.08) rotate(3deg);
+}
+
+/* BUTTON */
+.button {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 12px 25px;
+  background: white;
+  color: #5636bb;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background: #eee5ff;
+  transform: translateY(-4px);
+}
+
+/* NAVIGATION */
 nav {
   background: white;
   padding: 17px 10px;
@@ -66,12 +92,15 @@ nav a {
   text-decoration: none;
   font-weight: bold;
   margin: 5px 10px;
+  transition: all 0.3s ease;
 }
 
 nav a:hover {
-  color: #a64be8;
+  color: #a855f7;
+  transform: scale(1.1);
 }
 
+/* SECTIONS */
 section {
   max-width: 950px;
   margin: 30px auto;
@@ -79,6 +108,7 @@ section {
   background: white;
   border-radius: 18px;
   box-shadow: 0 5px 20px #22222212;
+  animation: fadeIn 1s ease-in-out;
 }
 
 section h2 {
@@ -90,17 +120,7 @@ section h2 {
   text-align: center;
 }
 
-.button {
-  display: inline-block;
-  margin-top: 18px;
-  padding: 12px 25px;
-  background: white;
-  color: #5636bb;
-  text-decoration: none;
-  border-radius: 25px;
-  font-weight: bold;
-}
-
+/* PHOTO GALLERY */
 .photo-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -111,8 +131,15 @@ section h2 {
   width: 100%;
   border-radius: 15px;
   object-fit: cover;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
+.photo-gallery img:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 20px #5636bb30;
+}
+
+/* POSTS */
 .post-intro {
   margin-bottom: 20px;
   color: #666;
@@ -124,12 +151,12 @@ section h2 {
   padding: 22px;
   border-radius: 12px;
   margin-top: 18px;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: all 0.4s ease;
 }
 
 .post-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px #5636bb20;
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 25px #5636bb30;
 }
 
 .post-card h3 {
@@ -143,6 +170,7 @@ section h2 {
   color: #666;
 }
 
+/* FOOTER */
 footer {
   background: #172b8c;
   color: white;
@@ -151,9 +179,41 @@ footer {
   margin-top: 40px;
 }
 
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* MOBILE DESIGN */
 @media (max-width: 600px) {
+  header {
+    padding: 55px 15px;
+  }
+
   header h1 {
     font-size: 32px;
+  }
+
+  header p {
+    font-size: 16px;
   }
 
   nav a {
@@ -166,54 +226,23 @@ footer {
     padding: 25px 18px;
   }
 }
-  /* Website Animations */
-html {
-    scroll-behavior: smooth;
-}
 
-section {
-    animation: fadeIn 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-header {
-    animation: slideDown 1s ease;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-nav a {
-    transition: 0.3s ease;
-}
-
-nav a:hover {
-    color: #a855f7;
-    transform: scale(1.1);
+/* REDUCE MOTION ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<!-- HOME HEADER -->
 <header id="home">
   <img
     class="profile-photo"
@@ -223,9 +252,11 @@ nav a:hover {
   <h1>ABINESH.B</h1>
   <p>Code. Create. Innovate.</p>
   <p>Exploring Technology | Learning Coding | Building Ideas</p>
+
   <a class="button" href="#about">Explore My Website</a>
 </header>
 
+<!-- NAVIGATION -->
 <nav>
   <a href="#home">Home</a>
   <a href="#profile">My Profile</a>
@@ -235,6 +266,7 @@ nav a:hover {
   <a href="#contact">Contact</a>
 </nav>
 
+<!-- WELCOME -->
 <section class="welcome">
   <h2>Welcome to My Digital World!</h2>
   <p>
@@ -243,6 +275,7 @@ nav a:hover {
   </p>
 </section>
 
+<!-- PROFILE -->
 <section id="profile">
   <h2>My Profile</h2>
   <p><strong>Name:</strong> Abinesh B</p>
@@ -250,15 +283,21 @@ nav a:hover {
   <p><strong>Personal Motto:</strong> Learn Today. Build Tomorrow.</p>
 </section>
 
+<!-- PHOTOS -->
 <section id="photos">
   <h2>My Photos</h2>
+
   <div class="photo-gallery">
-    <img src="Screenshot_20261112_192315_Photos.jpg" alt="My Photo">
+    <img
+      src="Screenshot_20261112_192315_Photos.jpg"
+      alt="My Photo">
   </div>
 </section>
 
+<!-- POSTS -->
 <section id="posts">
-  <h2>My Posts & Tech Updates</h2>
+  <h2>My Posts &amp; Tech Updates</h2>
+
   <p class="post-intro">
     Ideas, Innovation, Technology and My Coding Journey.
   </p>
@@ -281,7 +320,7 @@ nav a:hover {
       my skills one project at a time.
       My goal is to turn creative ideas into real experiences.
     </p>
-    <small>ABINESH.B | Learning & Innovation</small>
+    <small>ABINESH.B | Learning &amp; Innovation</small>
   </div>
 
   <div class="post-card">
@@ -304,30 +343,35 @@ nav a:hover {
     </p>
     <small>ABINESH.B | Future Goals</small>
   </div>
-
 </section>
 
+<!-- ABOUT -->
 <section id="about">
   <h2>About Me</h2>
+
   <p>
     Hello! I am Abinesh B. Welcome to my personal website.
     I am interested in coding, technology and learning new things.
   </p>
+
   <p>
     I believe in creativity, consistency and continuous improvement.
     My goal is to develop useful projects and grow my technical skills.
   </p>
 </section>
 
+<!-- CONTACT -->
 <section id="contact">
   <h2>Contact</h2>
   <p>Thank you for visiting my website!</p>
   <p>More contact information will be added later.</p>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <p>© 2026 ABINESH.B | Code. Create. Innovate.</p>
 </footer>
 
 </body>
 </html>
+
