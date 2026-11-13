@@ -1,5 +1,4 @@
-
-  
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -166,6 +165,49 @@ footer {
     margin: 18px 12px;
     padding: 25px 18px;
   }
+}
+  /* Website Animations */
+html {
+    scroll-behavior: smooth;
+}
+
+section {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+header {
+    animation: slideDown 1s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+nav a {
+    transition: 0.3s ease;
+}
+
+nav a:hover {
+    color: #a855f7;
+    transform: scale(1.1);
 }
 </style>
 </head>
