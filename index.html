@@ -567,61 +567,56 @@ modeToggle.addEventListener("click", function () {
 
 </body>
   
-<!-- ABINESH.B Website - Social Features -->
+
+<!-- ABINESH.B SOCIAL FEATURES -->
 <style>
 #social-features {
   max-width: 650px;
   margin: 30px auto;
-  padding: 20px;
+  padding: 25px;
   border-radius: 18px;
   background: linear-gradient(135deg,#eaf2ff,#f3eaff);
   color: #172554;
-  font-family: Arial, sans-serif;
   text-align: center;
+  font-family: Arial,sans-serif;
 }
 #social-features button {
-  margin: 5px;
-  padding: 11px 16px;
+  margin: 6px;
+  padding: 12px 18px;
   border: 0;
   border-radius: 12px;
-  background: #315bea;
+  background: #5636bb;
   color: white;
   cursor: pointer;
-  font-size: 15px;
 }
-#social-features button:hover { opacity: .85; }
 #social-features textarea {
   width: 95%;
   min-height: 65px;
   padding: 10px;
-  border: 1px solid #aaa;
   border-radius: 10px;
-  font: inherit;
 }
-#comment-list {
-  text-align: left;
-  overflow-wrap: anywhere;
-}
+#comment-list { text-align: left; }
 .comment {
   background: white;
+  padding: 12px;
   margin: 8px 0;
-  padding: 10px;
   border-radius: 10px;
+  overflow-wrap: anywhere;
 }
 </style>
 
 <section id="social-features">
   <h2>💙 Connect With ABINESH</h2>
 
-  <button id="likeBtn">❤️ Like <span id="likeCount">0</span></button>
+  <button id="likeBtn">❤️ Like</button>
   <button id="followBtn">＋ Follow</button>
   <button id="shareBtn">🔗 Share Website</button>
 
   <h3>😊 Reactions</h3>
-  <button onclick="react('👍')">👍</button>
-  <button onclick="react('❤️')">❤️</button>
-  <button onclick="react('😂')">😂</button>
-  <button onclick="react('🔥')">🔥</button>
+  <button data-reaction="👍">👍</button>
+  <button data-reaction="❤️">❤️</button>
+  <button data-reaction="😂">😂</button>
+  <button data-reaction="🔥">🔥</button>
   <p id="reactionResult">Choose a reaction!</p>
 
   <h3>💬 Comments</h3>
@@ -631,98 +626,102 @@ modeToggle.addEventListener("click", function () {
   <button id="commentBtn">Post Comment</button>
   <div id="comment-list"></div>
 
-  <h3>👁️ Visitor Counter</h3>
+  <h3>👁️ Visitor Count</h3>
   <p>Visits on this browser: <strong id="visitCount">0</strong></p>
 </section>
 
 <script>
-(() => {
-  const get = key => localStorage.getItem("abinesh_" + key);
-  const set = (key, value) =>
-    localStorage.setItem("abinesh_" + key, value);
+(function () {
+  const key = name => "abinesh_" + name;
+  const read = name => localStorage.getItem(key(name));
+  const save = (name, value) =>
+    localStorage.setItem(key(name), value);
 
-  // Local browser visit count
-  let visits = Number(get("visits") || 0) + 1;
-  set("visits", visits);
+  // Browser visit count
+  let visits = Number(read("visits") || 0) + 1;
+  save("visits", visits);
   document.getElementById("visitCount").textContent = visits;
 
-  // Like button
-  let liked = get("liked") === "yes";
-  let likes = Number(get("likes") || 0);
+  // Like
+  let liked = read("liked") === "yes";
+  let likes = Number(read("likes") || 0);
   const likeBtn = document.getElementById("likeBtn");
 
-  function updateLike() {
-    likeBtn.innerHTML =
-      (liked ? "💖 Liked " : "❤️ Like ") +
-      '<span id="likeCount">' + likes + '</span>';
+  function showLike() {
+    likeBtn.textContent =
+      (liked ? "💖 Liked " : "❤️ Like ") + likes;
   }
-  updateLike();
+  showLike();
 
   likeBtn.addEventListener("click", () => {
     liked = !liked;
     likes = Math.max(0, likes + (liked ? 1 : -1));
-    set("liked", liked ? "yes" : "no");
-    set("likes", likes);
-    updateLike();
+    save("liked", liked ? "yes" : "no");
+    save("likes", likes);
+    showLike();
   });
 
-  // Follow button
-  let followed = get("followed") === "yes";
+  // Follow
+  let followed = read("followed") === "yes";
   const followBtn = document.getElementById("followBtn");
 
-  function updateFollow() {
+  function showFollow() {
     followBtn.textContent = followed ? "✓ Following" : "＋ Follow";
   }
-  updateFollow();
+  showFollow();
 
   followBtn.addEventListener("click", () => {
     followed = !followed;
-    set("followed", followed ? "yes" : "no");
-    updateFollow();
+    save("followed", followed ? "yes" : "no");
+    showFollow();
   });
 
-  // Share button
+  // Share
   document.getElementById("shareBtn").addEventListener("click", async () => {
-    const shareData = {
-      title: "ABINESH.B Website",
-      text: "Visit my website!",
-      url: location.href
-    };
     try {
-      if (navigator.share) await navigator.share(shareData);
-      else {
+      if (navigator.share) {
+        await navigator.share({
+          title: "ABINESH.B Website",
+          text: "Visit my website!",
+          url: location.href
+        });
+      } else {
         await navigator.clipboard.writeText(location.href);
         alert("Website link copied!");
       }
     } catch (error) {
-      if (error.name !== "AbortError")
+      if (error.name !== "AbortError") {
         alert("Please copy the website link from your browser.");
+      }
     }
   });
 
   // Reactions
-  window.react = emoji => {
-    const key = "reactions";
-    let reactions = JSON.parse(get(key) || "{}");
-    reactions[emoji] = (reactions[emoji] || 0) + 1;
-    set(key, JSON.stringify(reactions));
-    document.getElementById("reactionResult").textContent =
-      Object.entries(reactions)
-        .map(([name, count]) => name + " " + count)
-        .join("  ");
-  };
+  document.querySelectorAll("[data-reaction]").forEach(button => {
+    button.addEventListener("click", () => {
+      const emoji = button.dataset.reaction;
+      const reactions = JSON.parse(read("reactions") || "{}");
+      reactions[emoji] = (reactions[emoji] || 0) + 1;
+      save("reactions", JSON.stringify(reactions));
 
-  // Comments stored on this browser only
-  let comments = JSON.parse(get("comments") || "[]");
+      document.getElementById("reactionResult").textContent =
+        Object.entries(reactions)
+          .map(([name, count]) => name + " " + count)
+          .join(" | ");
+    });
+  });
+
+  // Comments
+  let comments = JSON.parse(read("comments") || "[]");
   const list = document.getElementById("comment-list");
 
   function showComments() {
     list.replaceChildren();
     comments.forEach(comment => {
-      const item = document.createElement("div");
-      item.className = "comment";
-      item.textContent = comment;
-      list.appendChild(item);
+      const div = document.createElement("div");
+      div.className = "comment";
+      div.textContent = comment;
+      list.appendChild(div);
     });
   }
   showComments();
@@ -730,17 +729,23 @@ modeToggle.addEventListener("click", function () {
   document.getElementById("commentBtn").addEventListener("click", () => {
     const input = document.getElementById("commentInput");
     const value = input.value.trim();
+
     if (!value) {
-      alert("Please write a comment first.");
+      alert("Write a comment first!");
       return;
     }
+
     comments.push(value);
-    set("comments", JSON.stringify(comments));
+    save("comments", JSON.stringify(comments));
     input.value = "";
     showComments();
   });
 })();
 </script>
+
+
+
+
 
 </html>
 
